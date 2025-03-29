@@ -74,7 +74,7 @@ class GHDLBaseException(Exception):
         :param message:   The exception message.
         """
         super().__init__()
-        self.message = message
+        self._message = message
 
     # WORKAROUND: for Python <3.11
     # Implementing a dummy method for Python versions before
@@ -93,7 +93,7 @@ class GHDLBaseException(Exception):
 
     def __str__(self) -> str:
         """Returns the exception's message text."""
-        return self.message
+        return self._message
 
     def with_traceback(self, tb) -> None:
         super().with_traceback(tb)
