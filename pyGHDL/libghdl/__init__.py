@@ -10,6 +10,7 @@ from csv import excel
 # Authors:
 #   Tristan Gingold
 #   Patrick Lehmann
+#   Matthias Cabillot
 #
 # License:
 # ============================================================================
