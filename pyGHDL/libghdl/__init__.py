@@ -1,3 +1,4 @@
+from csv import excel
 # =============================================================================
 #               ____ _   _ ____  _       _ _ _           _         _ _
 #  _ __  _   _ / ___| | | |  _ \| |     | (_) |__   __ _| |__   __| | |
@@ -99,6 +100,13 @@ def _get_libghdl_path() -> Path:
     5. Try when running from the build directory.
     """
 
+    otherPlacesToTry : List[Path] = [
+        Path("/usr/local/lib"),
+        Path("/usr/lib"),
+        Path("/usr/lib64"),
+        Path.home() / ".local/lib",
+    ]
+
     def _check_libghdl_libdir(libDirectory: Path, libraryFilename: Path) -> Path:
         libGHDLSharedLibraryFile = libDirectory / libraryFilename
         if not libGHDLSharedLibraryFile.exists():
@@ -171,6 +179,15 @@ def _get_libghdl_path() -> Path:
         searchedAt.append(f"  Relative to build directory:         {libDirectory}")
         return _check_libghdl_libdir(libDirectory, libGHDLSharedLibraryFile)
     except (TypeError, FileNotFoundError):
+        pass
+
+    try:
+        for place in otherPlacesToTry:
+            libDirectory = place.resolve()
+            searchedAt.append(f"  Tried\t\t{libDirectory / libGHDLSharedLibraryFile}")
+            if (libDirectory / libGHDLSharedLibraryFile).exists():
+                return _check_libghdl_libdir(libDirectory, libGHDLSharedLibraryFile)
+    except:
         pass
 
     # Failed.
